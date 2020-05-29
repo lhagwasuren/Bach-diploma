@@ -1,0 +1,143 @@
+---
+title: "Simulation"
+author: "Lkhagvasuren"
+date: "5/20/2020"
+output:   
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: vignette
+    toc: true
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(forecast)
+library(ggplot2)
+library(boot)
+```
+
+Алхамууд :
+
+1. y ийг үүсгэх
+    + AIC ийг тооцож $\beta^*$ - г үнэлэх
+    + Бүүсттрап хийгээд AIC - г тооцон дундажаар нь $\beta^{**}$ - г тооцох
+2. Нэгдүгээр алхамыг 1000 удаа давтах
+3. 1001 дэхь утгыг таамаглан таамаглалын алдааг харьцуулах.
+ 
+```{r}
+
+# set.seed(3)
+# y = arima.sim( list(order= c(1,0,0), ar=.5),n = 1000)
+# 
+# order = c(1,0,0)
+# b1 = coef(arima(y, order = order,include.mean = F))
+# print(AIC(arima(y, order = order,include.mean = F)))
+# nsim = 500
+# b_sim = rep(NA,nsim)
+# 
+# for(i in 1:nsim){
+#   set.seed(3)
+#   y = arima.sim( list(order= c(1,0,0), ar=.5),n = 1000)
+#   b_sim[i] = coef(arima(y,order = order,include.mean = F))
+# }
+# 
+# qplot(b_sim,geom = 'histogram', bins = 10)
+# 
+# (b_bag = mean(b_sim))
+# print(b1)
+# 
+# nsim = 5000
+# b_sim = rep(NA , nsim)
+# order = c(1,0,0)
+# n = 1000
+```
+
+
+Урьдач нөхцөлүүдийг тодорхойлох
+
+```{r}
+set.seed(3)
+
+order = c(2,0,0)
+nsim = 100
+m = 100
+ar = c(.5,.45)
+h = 1
+n = 1500
+e <- rnorm(n, mean = 0, sd = 1)
+y_t = arima.sim( list(order= order, ar = ar),innov = e ,n = n)
+y = train
+  # y_t[-length(y_t)]
+
+```
+
+Параметрүүдийг тооцоолох функц тодорхойлох. /give_coef/
+
+```{r}
+
+bagging = function(series){
+  model = arima( series , order = c(2,0,0) , 
+                 include.mean = F )
+  coef(model)}
+
+give_coef = function(order, n, nsim, m, ar){
+  b = data.frame(ar1 = rep( NA, nsim ), ar2 = rep( NA, nsim ))
+  b_bag = data.frame(ar1_b = rep( NA, nsim ), ar2_b = rep( NA, nsim ))
+  y_real = rep(NA, nsim)
+  block_length <- n/3
+  for(i in 1:nsim){
+    y_t = arima.sim( list(order= order, ar = ar), n = n + 1)
+    y = y_t[-length(y_t)]
+    y_real[i] = y_t[length(y_t)]
+    b[i,] = coef( arima (y, order,include.mean = F) )
+    bag <- tsboot(y, bagging,R = m,l = block_length, sim = "fixed")
+    b_bag[i,] = colMeans(bag$t)
+  }
+return(
+  cbind(b,b_bag, y_real)
+  )
+  }
+
+# a = Sys.time()
+b_coef = give_coef(order = c(2,0,0),n = n, nsim = nsim,m = m, ar = ar)
+# Sys.time() - a
+```
+
+
+Параметрүүдээ ашиглан таамаглал хийх.
+
+```{r}
+pred_ar = rep(NA,nsim)
+pred_bag = rep(NA, nsim)
+
+# Make forecast with parametrs
+for(i in 1:nsim){
+  model = arima(y, order = c(2,0,0), include.mean = F,fixed = b_coef[i,1:2])
+  pred_ar[i] = forecast(model,h=1)$mean
+  model2 = arima(y, order = c(2,0,0), include.mean = F,fixed = b_coef[i,3:4])
+  pred_bag[i] = forecast(model2,h=1)$mean
+}
+```
+
+
+Бодит утгатай харьцуулах
+
+```{r}
+y_real = b_coef$y_real
+
+ar = sum((pred_ar - as.vector(y_real))^2)/nsim
+bag = sum((pred_bag - as.vector(y_real))^2)/nsim
+
+```
+
+```{r}
+ar
+bag 
+```
+
+
+
+
+
+
+

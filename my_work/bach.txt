@@ -1,0 +1,34 @@
+1. Эдийн засгийн таамаглалд
+	 машин сургалтын аргазүйг ашиглах нь
+
+1. Machine learning for time series forecasting - a
+		simulation study
+
+1. Y sim, 1000
+2. ar(2) b*  AIC
+
+Y resample
+resample b
+mean b_bag
+
+
+b_bag_1 b_bag_2 b_bag_3   
+hist    mean, var,   ----- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+

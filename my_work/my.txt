@@ -1,0 +1,10 @@
+1. Simulation AR,TAR, GARCH
+	ARIMA aar unelhe AIC (p,d,q)	ARIMA - ERROR	
+	block bootstrap y b,  y_hat    ERROR^2   -  MSE
+
+
+
+2 . Structure
+	
+	1. Forecast uncertainty - forecast avergare, too mony predictors, 
+	2. Exchange rate - 
