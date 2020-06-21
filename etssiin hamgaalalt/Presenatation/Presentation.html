@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Эдийн засгийн таамаглалд машин сургалтын аргыг ашиглах нь</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="О.Лхагвасүрэн /FA16B319/" />
+    <link href="Presentation_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Presentation_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="Presentation_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Эдийн засгийн таамаглалд машин сургалтын аргыг ашиглах нь
+## Баггинг аргазүй
+### О.Лхагвасүрэн /FA16B319/
+### СЭЗИС
+### 2020/06/08 (updated: 2020-06-10)
+
+---
+
+
+# Агуулга
+
+1. Оршил
+2. Судлагдсан байдал
+  + Хугацааны цуваан таамаглалтай, түүх хөгжил
+  + Баггинг аргазүй ашигласан таамаглалын ажлууд
+  + Машин сургалт түүний эдийн засгийн хэрэглээ
+3. Онолын ухагдахуун, аргазүй
+4. Симуляцийн төлөвлөгөө
+5. Симуляцийн үр дүн
+6. Дүгнэлт санал
+
+---
+# Оршил
+
+- Хугацаан цувааны таамаглалд загварын тодорхой бус байдал голлох бэрхшээлүүдийн нэг байдаг. Тухайн түүврийн хувьд сайн тохирч байна гэдэг нь энэ загвар оновчтой таамаглал хийнэ гэсэн үг биш юм. 
+
+- Энэхүү судалгааны ажил нь машин сургалтын баггинг аргазүйн гүйцэтгэлийг хэмжих зорилготой симуляцийн судалгаа бөгөөд Авторегрессив загвар (АR), threshold Авторегрессив загвар (TAR) болон  Ерөнхийлсөн Авторегрессив Нөхцөлт Хетероскедастик (GARCH) өгөгдөл үүсгэх процессуудыг ашиглана.
+
+---
+# Зорилго, зорилт
+
+Энэхүү судалгааны гол зорилго нь таамаглалын загваруудыг симуляцийн аргаар шинжлэн, харьцуулах билээ. Энэ зорилгыг ойлгомжтой, дэс дараалалтай болгохын тулд дараах зорилгуудад хувааж болох юм. Үүнд:
+
+- Сүүлийн 30 жилийн хугацааны цуваан таамаглалын загваруудын хөгжлийн түүхийг хураангуйлах, мөн баггинг аргазүйтэй холбоотой судалгааны ажлуудын үр дүнг дурдах 
+- Баггинг аргазүйг тоймлон аргазүйн талаас судлах
+- Симуляцийн судалгааг төлөвлөх
+- Монте-Карло симулцийн үр дүнг харуулах
+- Шинжилгээний үр дүнд үндэслэн дүгнэлт санал боловсруулах зэрэг багтана.
+
+---
+class: inverse, center, middle
+
+# Судлагдсан байдал
+
+---
+
+# Хугацаан цувааны таамаглал
+
+- Экспоненциал гөлийлгөлт 
+  + 1950-1960-аад онд Браун, Холт, Уинтерс (1960) 
+  + Хандлагын 5, улирлын 3 хэлбэрийг ашигладаг
+  + Хиндман (2001) - Нэгдүгээр эрэмбийн ARIMA загвараас илүү сайн гүйцэтгэлтэй
+  + Аргазүйн шүүмжлэлийн нэг нь таамаглалын интервал гарган авах боломжгүй
+
+- ARIMA 
+  + Юлегийн (Yule, 1927) - Стохастик процесс
+  + Слуцкий, Уокер, Яглом, Юле - авторегрессив (АR) дараа нь хөдөлгөөнт дундаж (MA)
+  + Бокс ба Женкинс (1970) - "Хугацааны цуваан шинжилгээ: Таамаглал ба удирдлага"
+---
+
+# Баггинг аргазүй
+
+- Баггинг нь таамаглалын загварын тодорхой бус байдалд нарийвчлалыг сайжруулахад зориулагдсан статистик аргазүй юм. (Breiman, 1996)
+- Хирано ба Райт (2017) нар нь таамаглагч хувьсагчдын сонголтын талаар тодорхой бус үед Рао Блэквеллийн теорем ба Багингын дагуу таамаглалын загвараа сонгож гүйцэтгэлийг харьцуулах судалгаа хийсэн.
+- Иноуе, Килиан (2008) нар АНУ-ын ХҮИ-ийн хугацаан цувааг таамаглахдаа хэд хэдэн загваруудыг баггингтай болон баггинггүй харьцуулж үзсэн бөгөөд үүнд регрессийн загварууд, фактор загвар болон агшаасан регрессийн загварууд (ЛАССО-той) хамаарна. 
+- Жин, Су, Уллах (2014) - Монте Карло симуляци нь энэхүү арга уламжлалт нэг алхамт шугаман таамаглал болон параметрийн бус таамаглалд ерөнхийдөө сайн гүйцэтгэлтэй, түүврийн хэмжээ бага байхад ч гайхалтай үр дүнтэй байгааг харуулж байна.
+
+---
+
+class: inverse, center, middle
+
+# Онол, аргазүй
+
+---
+
+# Баггинг аргазүй
+
+Бүүтстрап нэгтгэл буюу баггинг аргазүй нь статистик сургалтын аргуудын вариацыг бууруулах зорилготой.
+Бие биеэсээ үл хамаарах, `\(\sigma^2\)` вариацтай  `\(n\)` ширхэг үл хамаарах `\(Z_1,..,Z_n\)` ажиглалт өгсөн гэвэл дундаж нь болох `\(\bar Z\)` – ийн вариац `\(Z\)` болно. Өөрөөр хэлбэл ажиглалтуудыг дундажлах нь вариацыг бууруулдаг
+
+
+`$$\hat f _{avg}(x)= \frac{1}{b} \sum_{b=1}^{B} \hat f ^{*b}(x)$$`
+
+- Таамаглалын вариацыг бууруулах, нарийвчлалыг сайжруулах уламжлалт арга нь  эх олонлогоос маш олон сургалтын өгөгдөл салган авч, тус бүрд нь таамаглалын загвар боловсруулж, үр дүнг дундажлах явдал билээ. 
+
+---
+class: inverse, center, middle
+
+# Монте-Карло симуляци
+
+---
+
+# Өгөгдөл үүсгэх процесс (ӨҮП)
+
+- Бид судалгаандаа практикт хамгийн түгээмэл ашиглагддаг, хэвийн тархсан үлдэгдэл санамсаргүй хэмжигдэхүүн бүхий авторегрессив (АR), threshold авторегрессив загвар (TAR) болон  Ерөнхийлсөн авторегрессив нөхцөлт хетероскедастик (ЕАНХ) процессуудыг авч үзэх болно.
+
+`$$AR(2):y_t=0.5y_{t-1}+0.45y_{t-2}+\varepsilon_t$$`
+
+`\(y_t=0.1y_{t-1}+0.09y_{t-2}+\varepsilon_t\)`  энд `\(|y_{t-1}|\le 0\)` 
+`\(y_t=0.2y_{t-1}+0.05y_{t-2}-\varepsilon_t\)`  энд `\(|y_{t-1}|&gt;0\)`
+
+
+`$$GARCH(2,2):y_t^2 =0.12y_{t-1}^2+0.04y_{t-2}^2+0.08\varepsilon^2_{t-1}+0.05\varepsilon_{t-2}^2+\varepsilon_t$$`
+
+`$$\varepsilon_t ~ N(0,1)$$`
+
+---
+
+# Шинжилгээний хувилбар
+
+ Ерөнхий тавил : 100 урттай хугацааны цуваа, 500 удаагийн симуляци, 100 удаагийн бүүтстрап
+
+|Шинжилгээний төрөл         |  Хувилбарууд|||
+|:-------------------------:|:----:|:---:|:----:|
+|Үндсэн шинжилгээ| h=1|   h=6| h=12|
+|Тархалтын шинжилгээ        | `\(N ~ (1,0)\)` | `\(T ~ (df=20)\)` | `\(T ~ (df=60)\)` | 
+|Процессын шинжилгээ        | Цагаан шуугиантай ойр|Нэгж язгууртай ойрхон|Бүтцийн өөрчлөлттэй| 
+
+
+---
+# Симуляцийн алхам
+
+Симуляцийг дараах алхмуудын дагуу гүйцэтгэнэ:
+
+1. Харгалзах ӨҮП бүрд 100 урттай симуляцийн цуваа үүсгэх
+2. Тухайн цувааг АR(2) загвараар загварчилж, дараагийн h үеийн таамаглалыг хийх замаар `\(y_{t+h}^{org}\)` гаргаж авах
+3. Тухайн цувааг блок бүүтстрап хийх замаар B ширхэг цуваа гарган авч АR(2) загвараар таамаглал хийж үр дүнг дундажлах `$$y_{t+h}^{bag} = \frac {\sum_{i=1}^{B}y_{t+h}^B}{B}$$`
+4. Гуравдугаар алхамын үр дүн бодит утгатай харьцуулах
+5. 1-4 дэхь алхмыг 100 удаа давтах 
+6. Нэгдсэн MSE болон гажуудлыг хэмжих
+
+
+---
+class: inverse, center, middle
+# Симуляцийн үр дүн
+
+---
+
+# Үндсэн шинжилгээ
+
+Үндсэн шинжилгээний гол зорилго нь AR загварын болон баггинг ашиглаж нэгтгэн дундажласан таамаглалын утга бодит утгаасаа хэр ялгаатай байгааг шинжлэх  өөрөөр хэлбэл MSE -ийн тусламжтай баггинг аргазүй таамаглалын нарийвчлалд хэрхэн нөлөөлж буйг хэмжих.
+ 
+![](pictures/undsen.PNG)
+
+Баггинг аргазүйн MSE нь TAR болон GARCH ӨҮП-ийн хувьд сайн гүйцэтгэлийг өгч байна. 
+
+---
+
+#  Тархалтын шинжилгээ
+
+Тархалтын шинжилгээний гол зорилго нь үлдэгдэл санамсаргүй хэмжигдэхүүний тархалт таамаглалын гүйцэтгэлд хэрхэн нөлөөлөхийг авч үзэх билээ.
+
+![](pictures/tarhal.PNG)
+
+Энэ нь загвар буруу тодорхойлогдсон бөгөөд үлдэгдэл санамсаргүй хэмжигдэхүүний тархалт хэвийн бус хуульд захирагддаг тохиолдолд баггинг аргазүй үр ашигтай байх хандлагатайг илтгэж байгаа юм.
+
+---
+
+# Процессын шинжилгээ
+
+Энэхүү шинжилгээний хэсгийн зорилго нь ӨҮП-аар үүсгэсэн симуляцийн цуваа маань нэгж язгууртай ойрхон, цагаан шуугиантай ойрхон эсвэл бүтцийн өөрчлөлттэй байгаа тохиолдолд баггинг аргазүйн гүйцэтгэл хэрхэн өөрчлөгдөж буйг дүгнэх билээ. 
+
+
+![](pictures/process.PNG)
+
+Нэгж язгууртай ойр болон бүтцийн өөрчлөлттэй үед блок бүүтстрап хийх нь тохиромжгүй гэдгийг харуулж байна.
+
+---
+# Дүгнэлт, санал  
+
+1. TAR, GARCH загвараар үүсгэсэн симуляцийн хувьд баггинг аргазүй таамаглалын гүйцэтгэлийг сайжруулах боломжтойг оллоо.
+  + Таамаглалын тодорхой бус байдалд баггинг аргазүйн тусламжтай гүйцэтгэлийг сайжруулах боломжтой.
+  + бүүтстрапийн тоог хангалттай их түвшин байлгах хэрэгтэй
+  + уг процесс нэгж язгууртай ойрхон бол бүүтстрап дахин түүвэрлэлт тохиромжгүй.
+
+2. Судалгааны ажлыг бодит амьдрал дээрх өгөгдлөөр өргөтгөх нь ач холбогдолтой юм.
+
+3. Баггинг аргазүйг илүү нарийвчилсан, илүү том загварууд дээр ашиглах хэрэгтэй. 
+--- 
+
+
+
+
+---
+
+#Ашигласан материал
+
+1. [Симуляци хийсэн R code](https://www.kaggle.com/lkhagwasuren/simulation)
+2. Breiman, L. (1996). Bagging predictors. *Machine learning*, 26(2), 123-140.
+3. Box, G. E. P., &amp; Jenkins, G. M. (1970). Time series analysis:Forecasting and control. San Francisco: Holden Day.
+4. Hirano, K., &amp; Wright, J. H. (2017). Forecasting with model uncertainty: Representations and risk. *Econometrica*, 85(2), 617–643.
+5. Inoue, A., &amp; Kilian, L. (2008). How useful is Bagging in forecasting economic time. *Journal of the American Statistical Association*, 103(482), 511–522. 
+6. Yule, G. U. (1927). On the method of investigating periodicities in disturbed series, with special reference to WolferTs sunspot numbers. *Philosophical Transactions of the Royal Society London*, Series A, 226, 267– 298.
+---
+
+#Асуулт, санал зөвлөмж
+
+&lt;dev class = "center" &gt;
+Анхаарал тавьсан явдалд баярлалаа.
+&lt;/dev&gt;
+
+![](pictures/sa.jpg)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+<style>
+.logo {
+  background-image: url(pictures/logo.jpg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  width: 60px;
+  height: 78px;
+  z-index: 0;
+}
+</style>
+
+<script>
+document
+  .querySelectorAll(
+    '.remark-slide-content' +
+    ':not(.title-slide)' +
+    // add additional classes to exclude here, e.g.
+    // ':not(.inverse)' +
+    ':not(.hide-logo)'
+  )
+  .forEach(el => {
+    el.innerHTML += '<div class="logo"></div>';
+  });
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

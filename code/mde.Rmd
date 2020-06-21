@@ -1,5 +1,15 @@
-# rm(list = ls())
+---
+title: "code2"
+author: "Lkhagvasuren"
+date: "6/7/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,eval = F)
+```
   
+```{r}
 library(tseries)
 library(forecast)
 library(fGarch)
@@ -107,3 +117,4 @@ for(i in 1:nsim){
 
 MSE_ar <- colMeans(errors_sim^2)
 MSE_bag <- colMeans(errors_bag^2)
+```

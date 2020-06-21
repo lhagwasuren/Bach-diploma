@@ -1,3 +1,5 @@
+
+```{r }
 # rm(list = ls())
   
 library(tseries)
@@ -107,3 +109,12 @@ for(i in 1:nsim){
 
 MSE_ar <- colMeans(errors_sim^2)
 MSE_bag <- colMeans(errors_bag^2)
+```
+
+
+---
+title: "sim2.R"
+author: "Lkhagvaa"
+date: "2020-06-07"
+---
+
